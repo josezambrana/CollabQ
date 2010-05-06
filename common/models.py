@@ -52,6 +52,13 @@ ACTOR_LIMITED_EXTRA = ('icon',
 
 # Internal Utility Functions
 
+JSON = 1
+XML = 2
+FORMAT_CHOICES = (
+    (JSON, "JSON"),
+    (XML, "XML"),
+)
+
 def _get_actor_type_from_nick(nick):
   if nick[0] == "#":
     return "channel"
@@ -710,8 +717,26 @@ class Tag(DeletedMarkerModel):
   string = models.StringProperty()    # the tag
   owner = models.StringProperty()     # owner actor
 
+"""
+class ProviderRule(CachingModel):
+    name = models.StringProperty() #models.CharField(max_length=128, null=True, blank=True)
+    regex = models.StringProperty() # models.CharField(max_length=2000)
+    endpoint = models.StringProperty() #models.CharField(max_length=2000)
+    format = models.IntegerProperty(choices=FORMAT_CHOICES) #models.IntegerField(choices=FORMAT_CHOICES)
 
+    def __unicode__(self):
+        return self.name or self.endpoint
 
+class StoredOEmbed(CachingModel):
+    match = models.StringProperty()
+    max_width = models.IntegerProperty()
+    max_height = models.IntegerProperty()
+    html = models.StringProperty()
+    date_added = properties.DateTimeProperty(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.match
+"""
 #class ActorMobile(models.Model):
 #  nick = models.TextField()
 #  mobile = models.TextField()

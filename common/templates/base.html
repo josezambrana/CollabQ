@@ -1,5 +1,4 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -7,7 +6,8 @@
     {{SITE_NAME}} {{DEBUG|yesno:"DEBUG ,"}}| {% block title %} {% endblock %}
   </title>
   <meta name="description" content="{{SITE_DESCRIPTION}}" />
-  <meta name="verify-v1" content="pkcNR12Rp7uneg+Akrmy74hdRMdwcjWLKkYIC8MKpLk=" />
+  <meta name="verify-v1" content="pkcNR12Rp7uneg+Akrmy74hdRMdwcjWLKkYIC8MKpLk=" />  
+
   {% block extrameta %}
   {% endblock %}
   {{component.best.analytics.header|safe}}
@@ -87,7 +87,6 @@
 <body {% block bodytag %}{% if area %}id="{{area}}" {% endif %}{% if not request.user %}class="global"{% endif %}{% endblock %}>
   {% block body %}
   {% endblock %}
-
   {% if DEBUG %}
   <div id="debug" class="clear">
     <a href="#dbg" onclick="$('div#dbg').toggle();">Toggle debug</a>

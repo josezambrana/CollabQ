@@ -1,7 +1,7 @@
 {% load avatar format entry %}
 <ul class="stream {% if hide_avatar %}stream-hide-avatar{% endif %}">
 
-{% for entry in entries %}
+{% for entry , url in entries2 %}
   {% comment %}
   {% if not notdate %}
   {% ifchanged %}
@@ -9,7 +9,7 @@
   {% endifchanged %}
   {% endif %}
   {% endcomment %}
-
+  
   {% if entry.entry %}
   <li class="comment" id="stream-comment-{{entry.uuid}}">
     <div class="top">
@@ -21,13 +21,17 @@
   {% endif %}
 
   {% ifequal entry.stream_ref.type 'presence' %}
+  
   <li class="presence" id="stream-{{entry.uuid}}">
     <div class="top">
       <div class="bottom clearfix s-{{entry.stream}}">
       {% include "common/templates/stream_entry.html" %}
+      
       </div>
     </div>
   </li>
+
+
   {% endifequal %}
   
   {% ifequal entry.stream_ref.type 'private' %}
