@@ -71,6 +71,53 @@ jQuery.fn.addHover = function() {
   )
 };
 
+/*
+jQuery.fn.oembedTabs = function() {
+    jQuery(this).each(function(){
+        jQuery(this).click(function(){
+            jQuery(document).log('dentro del evento click');
+            tab = jQuery(this).attr('id');
+            id_cont = "#" + tab+'_form';
+            jQuery(document).log('id_cont: '+id_cont);
+            tag_div = jQuery(id_cont);
+            jQuery('.formoembed').each(function(){
+                jQuery(this).hide();
+            });
+            tag_div.show();
+            return false;
+        })
+    })
+}
+*/
+$("#link").blur(function (){
+  olink = $("#link").val();
+  $("#oembedcont").fadeOut(1000);
+  $("#oembed").oembed(olink,
+                    {
+                    embedMethod: "append",
+                    maxWidth: 1024,
+                    maxHeight: 768,
+                    vimeo:{ autoplay: false, maxWidth: 320, maxHeight: 240},
+                    youtube:{ autoplay: false, maxWidth: 320, maxHeight: 240},
+                    metacafe:{ autoplay: false, maxWidth: 320, maxHeight: 240},
+                    qik:{ autoplay: false, maxWidth: 320, maxHeight: 240},
+                    flickr:{ maxWidth: 320, maxHeight: 240},
+                    amazon:{ maxWidth: 320, maxHeight: 240},
+                    twitpic:{ maxWidth: 320, maxHeight: 240},
+                    viddler:{ autoplay: false, maxWidth: 320, maxHeight: 240},
+//                        myspace:{ autoplay: false, maxWidth: 320, maxHeight: 240},
+                    screenr:{ autoplay: false, maxWidth: 320, maxHeight: 240},
+
+                    slideshare:{ maxWidth: 320, maxHeight: 240},
+                    imdb:{ maxWidth: 320, maxHeight: 240},
+                    hulu:{ autoplay: false, maxWidth: 320, maxHeight: 240},
+                    googlevideo: { autoplay: false, maxWidth: 320, maxHeight: 240},
+                    revision3:{ autoplay: false, maxWidth: 320, maxHeight: 240},
+                    fivemin: { autoplay: false, maxWidth: 320, maxHeight: 240}
+                    });
+ });
+
+
 jQuery.fn.bubble = function(top, left) {
   var bubble = null;
   var body = null;

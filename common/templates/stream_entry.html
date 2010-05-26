@@ -10,7 +10,9 @@
   {% endif %}
    <span>   
    {{entry.extra.title|pobox_escape|format_fancy|format_links|format_actor_links|urlize}}
-   {% include 'common/templates/oembed.html' %}
+   {% autoescape off %}
+       {{entry.extra.link}}
+   {% endautoescape %}
     </span>
 </h3>
 

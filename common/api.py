@@ -60,6 +60,10 @@ from google.appengine.ext import db
 import logging
 import random
 import re
+import simplejson
+from google.appengine.api import urlfetch
+import urllib2
+
 
 NO_ACCESS = 'none'
 READ_ACCESS = 'read'
@@ -3544,8 +3548,8 @@ def post(api_user, _task_ref=None, **kw):
     * message - the title of your entry
     * location - free form location for this entry
     * nick - the actor posting this entry
-    * uuid - a unique identifier for this entry
-  
+    * uuid - a unique identifier for this entry  
+    * link - url external
   RETURNS: entry_ref
 
   
@@ -3557,6 +3561,7 @@ def post(api_user, _task_ref=None, **kw):
   generated = kw.get('generated', 0)
   uuid = kw.get('uuid', util.generate_uuid())
   nick = clean.nick(kw.get('nick', ''))
+  url = kw.get('link')
   extra = {}
   # Thumbnails are not yet shown on the site but are supported by the mobile
   # client.
@@ -3616,11 +3621,22 @@ def post(api_user, _task_ref=None, **kw):
                                     kw=kw)
 
 
+  #Grasping the link sent the user
+  link = None
+  if url != '':
+      link = getPage(url)
+  else:
+      link = page
+
+  logging.info('APIIIIIIIIIIIIIIIIIIIIIIIIII link>> %s' % link)
+  
+
   # we've decided this is a presence update
   stream_ref = stream_get_presence(api_user, nick)
   actor_ref = actor_get(api_user, nick)
   extra['title'] = message
   extra['location'] = location
+  extra['link'] = link
 
   values = {
     'stream': stream_ref.key().name(),
@@ -3652,9 +3668,85 @@ def post(api_user, _task_ref=None, **kw):
 
   return entry_ref
 
-#######
-#######
-#######
+
+#################
+def getPage(url):
+  page = str(url)
+  lin = page
+  obj = urllib2.urlopen(url)
+  list = obj.readlines()
+  title =  filter(lambda x : str(x).strip().startswith('<title'),list)
+  if title != []:
+      logging.info('APIIIIIIIIIIIIIIIIIIIIIIIIII link>> %s' % "<a href=\""+url+"\">"+str(title[0])+"</a>")
+      page = "<a href=\""+url+"\">"+removeTag(str(title[0]))+"</a>"
+  else:
+      page ="<a href=\""+url+"\">"+url+"</a>"
+
+  if lin.startswith("http://www.youtube.com") | lin.startswith("www.youtube.com") | lin.startswith("youtube.com") :
+    youtube = 'http://www.youtube.com/oembed?url='+lin+'&format=json'
+    obj = urlfetch.fetch(youtube)
+    data = simplejson.loads(obj.content)
+    lin = data.get('html')
+    page = page + lin
+
+  elif lin.startswith("http://www.vimeo.com") | lin.startswith("www.vimeo.com") | lin.startswith("vimeo.com") | lin.startswith("http://vimeo.com"):
+    vimeo = 'http://www.vimeo.com/api/oembed.json?url='+lin+'&width=350&height=350'
+    obj = urlfetch.fetch(vimeo)
+    data = simplejson.loads(obj.content)
+    lin = changes(data.get('html'))
+    page = page + lin
+
+  elif lin.startswith("http://www.qik.com") | lin.startswith("www.qik.com") | lin.startswith("qik.com") | lin.startswith("http://qik.com"):
+    qik = 'http://qik.com/api/oembed.json?url='+lin
+    obj = urlfetch.fetch(qik)
+    data = simplejson.loads(obj.content)
+    lin = data.get('html')
+    page = page + lin
+
+  elif lin.startswith("http://www.revision3.com") | lin.startswith("www.revision3.com") | lin.startswith("revision3.com") | lin.startswith("http://revision3.com"):
+    revision = 'http://revision3.com/api/oembed/?url='+lin+'&format=json'
+    obj = urlfetch.fetch(revision)
+    data = simplejson.loads(obj.content)
+    lin = data.get('html')
+    page = page + lin
+
+  elif lin.startswith("http://www.viddler.com") | lin.startswith("www.viddler.com") | lin.startswith("viddler.com") | lin.startswith("http://viddler.com"):
+    viddler = 'http://lab.viddler.com/services/oembed/?url='+lin+'&format=json'
+    obj = urlfetch.fetch(viddler)
+    data = simplejson.loads(obj.content)
+    lin = data.get('html')
+    page = page + lin
+
+  elif lin.startswith("http://www.flickr.com") | lin.startswith("www.flickr.com") | lin.startswith("flickr.com") | lin.startswith("http://flickr.com"):
+      flickr = 'http://www.flickr.com/services/oembed?url='+lin+'&format=json'
+      obj = urlfetch.fetch(flickr)
+      data = simplejson.loads(obj.content)
+      lin = changes('<img src=\"'+data.get('url')+'\"/>')
+      page = page + lin
+
+  return page
+
+def removeTag(tag):
+  return tag.replace('<title>','').replace('\n','').replace('</title>','')
+
+def changes(url):
+  format = ""
+  for word in str(url).split():
+    if word.startswith("width="):
+      word=word.strip('0123456789"')
+      format+=" "+word+"\"320\""
+    ###################
+    #fix parser heigth
+    ###################
+    elif word.startswith("height="):
+      word=word.strip('0123456789">')
+      format+=" "+word+"\"320\">"
+    else:
+      format +=" "+word
+  return format.strip()
+
+############################
+
 
 @write_required
 def dm(api_user, **kw):

@@ -1,7 +1,8 @@
 {% load avatar format entry %}
+
 <ul class="stream {% if hide_avatar %}stream-hide-avatar{% endif %}">
 
-{% for entry , url in entries2 %}
+{% for entry in entries %}
   {% comment %}
   {% if not notdate %}
   {% ifchanged %}

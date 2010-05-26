@@ -1,0 +1,118 @@
+/* 
+    Document   : embed
+    Created on : 18-05-2010, 08:22:05 PM
+    Author     : antonio
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+/*
+root { 
+    display: block;
+}*/
+
+ul.tabs {
+
+margin: 0;
+
+padding: 0;
+
+float: left;
+
+list-style: none;
+
+height: 32px; /*--Define el ancho de las tabs--*/
+
+border-bottom: 1px solid #999;
+
+border-left: 1px solid #999;
+
+width: 100%;
+
+}
+
+ul.tabs li {
+
+float: left;
+
+margin: 0;
+
+padding: 0;
+
+height: 31px; /*--Sustrae 1px de la altura de la lista desordenada--*/
+
+line-height: 20px; /*--Alineamiento vertical del texto dentro de la tabla--*/
+
+border: 1px solid #999;
+
+border-left: none;
+
+margin-bottom: -1px; /*--Desplaza los item de la lista abajo 1px--*/
+
+overflow: hidden;
+
+position: relative;
+
+background: #e0e0e0;
+
+}
+
+ul.tabs li a {
+
+text-decoration: none;
+
+color: #000;
+
+display: block;
+
+font-size: 1em;
+
+padding: 0 20px;
+
+border: 1px solid #fff;
+
+outline: none;
+
+}
+
+ul.tabs li a:hover {
+
+background: #ccc;
+
+}
+
+html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Estate seguro de que a la tab activa no se le aplicarán estas propiedades hover--*/
+
+background: #fff;
+
+border-bottom: 1px solid #fff; /*--Esto hace que la tab activa esté conectada con respecto a su contenido--*/
+
+}
+/*Second Part*/
+.tab_container {
+
+border: 1px solid #999;
+
+border-top: none;
+
+overflow: hidden;
+
+clear: both;
+
+float: left; width: 100%;
+
+background: #fff;
+
+}
+
+.tab_content {
+
+padding: 10px;
+
+font-size: 1.0em;
+
+}
