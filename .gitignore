@@ -6,4 +6,5 @@ index.yaml
 *.bak
 *.orig
 *.swp
+*.git
 nbproject/
