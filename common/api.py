@@ -3673,13 +3673,16 @@ def post(api_user, _task_ref=None, **kw):
 def getPage(url):
   page = str(url)
   lin = page
-  obj = urllib2.urlopen(url)
-  list = obj.readlines()
-  title =  filter(lambda x : str(x).strip().startswith('<title'),list)
-  if title != []:
-      logging.info('APIIIIIIIIIIIIIIIIIIIIIIIIII link>> %s' % "<a href=\""+url+"\">"+str(title[0])+"</a>")
-      page = "<a href=\""+url+"\">"+removeTag(str(title[0]))+"</a>"
-  else:
+  try:
+      obj = urllib2.urlopen(url)
+      list = obj.readlines()
+      title =  filter(lambda x : str(x).strip().startswith('<title'),list)
+      if title != []:
+          logging.info('APIIIIIIIIIIIIIIIIIIIIIIIIII link>> %s' % "<a href=\""+url+"\">"+str(title[0])+"</a>")
+          page = "<a href=\""+url+"\">"+removeTag(str(title[0]))+"</a>"
+      else:
+          page ="<a href=\""+url+"\">"+url+"</a>"
+  except:
       page ="<a href=\""+url+"\">"+url+"</a>"
 
   if lin.startswith("http://www.youtube.com") | lin.startswith("www.youtube.com") | lin.startswith("youtube.com") :
@@ -3687,44 +3690,80 @@ def getPage(url):
     obj = urlfetch.fetch(youtube)
     data = simplejson.loads(obj.content)
     lin = data.get('html')
-    page = page + lin
+    title = "<a href=\""+url+"\">"+data.get('title')+"</a>"
+    description = filter(lambda x : str(x).strip().startswith('<span >'),list)[1]
+    page = page + '<p>'+title+ description+'</p>'+lin
 
   elif lin.startswith("http://www.vimeo.com") | lin.startswith("www.vimeo.com") | lin.startswith("vimeo.com") | lin.startswith("http://vimeo.com"):
     vimeo = 'http://www.vimeo.com/api/oembed.json?url='+lin+'&width=350&height=350'
     obj = urlfetch.fetch(vimeo)
     data = simplejson.loads(obj.content)
     lin = changes(data.get('html'))
-    page = page + lin
+    title = "<a href=\""+url+"\">"+data.get('title')+"</a>"
+    description = data.get('description')
+    page = page + '<p>'+title+ description+'</p>'+lin
 
   elif lin.startswith("http://www.qik.com") | lin.startswith("www.qik.com") | lin.startswith("qik.com") | lin.startswith("http://qik.com"):
     qik = 'http://qik.com/api/oembed.json?url='+lin
     obj = urlfetch.fetch(qik)
     data = simplejson.loads(obj.content)
     lin = data.get('html')
-    page = page + lin
+    title = "<a href=\""+url+"\">"+data.get('title')+"</a>"
+    page = page + '<p>'+title+'</p>'+lin
 
   elif lin.startswith("http://www.revision3.com") | lin.startswith("www.revision3.com") | lin.startswith("revision3.com") | lin.startswith("http://revision3.com"):
     revision = 'http://revision3.com/api/oembed/?url='+lin+'&format=json'
     obj = urlfetch.fetch(revision)
     data = simplejson.loads(obj.content)
     lin = data.get('html')
-    page = page + lin
+    title = "<a href=\""+url+"\">"+data.get('title')+"</a>"
+    page = page + '<p>'+title+'</p>'+lin
 
-  elif lin.startswith("http://www.viddler.com") | lin.startswith("www.viddler.com") | lin.startswith("viddler.com") | lin.startswith("http://viddler.com"):
-    viddler = 'http://lab.viddler.com/services/oembed/?url='+lin+'&format=json'
-    obj = urlfetch.fetch(viddler)
-    data = simplejson.loads(obj.content)
-    lin = data.get('html')
-    page = page + lin
+############# vlender no retunr format json #################
 
+#  elif lin.startswith("http://www.viddler.com") | lin.startswith("www.viddler.com") | lin.startswith("viddler.com") | lin.startswith("http://viddler.com"):
+#    viddler = 'http://lab.viddler.com/services/oembed/?url='+lin+'&format=json'
+#    obj = urlfetch.fetch(viddler)
+#    data = simplejson.loads(obj.content)
+#    lin = data.get('html')
+#    page = page + lin
+#################################################################
+# getDescription
+# filter (lambda x: x.find("description")!=-1,meta)
+################################################################
   elif lin.startswith("http://www.flickr.com") | lin.startswith("www.flickr.com") | lin.startswith("flickr.com") | lin.startswith("http://flickr.com"):
       flickr = 'http://www.flickr.com/services/oembed?url='+lin+'&format=json'
       obj = urlfetch.fetch(flickr)
       data = simplejson.loads(obj.content)
       lin = changes('<img src=\"'+data.get('url')+'\"/>')
-      page = page + lin
+      title = "<a href=\""+url+"\">"+data.get('title')+"</a>"
+      meta=filter(lambda x : x.strip().startswith('<meta'),list)
+      descriptionlist = filter (lambda x: x.find("description")!=-1,meta)
+      description = ""
+      if descriptionlist.__len__()>0:
+        des = descriptionlist[0]
+        description = des.replace("<meta","").replace("name=\"description\"","").replace("content=\"","").replace("\">","")
+
+      page = page + '<p>'+title+ description+'</p>'+lin
+  else:
+    try:
+        meta=filter(lambda x : x.strip().startswith('<meta'),list)
+        descriptionlist = filter (lambda x: x.find("description")!=-1,meta)
+        description = ""
+        logging.info('APIIIIIIIIIIIIIIIIIIIIIIIIII Antro aquiiiiiiiii>> %s' % descriptionlist)
+        if descriptionlist.__len__()>0:
+           des = descriptionlist[0]
+           description = des.replace("<meta","").replace("name=\"description\"","").replace("content=\"","").replace("\">","")
+           logging.info('APIIIIIIIIIIIIIIIIIIIIIIIIII Antro Decriptionnnn>> %s' % description)
+
+        page = '<p>' + description +'</p>'
+
+
+    except:
+        pass
 
   return page
+
 
 def removeTag(tag):
   return tag.replace('<title>','').replace('\n','').replace('</title>','')
