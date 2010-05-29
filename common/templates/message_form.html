@@ -42,6 +42,49 @@
           <label for="message" id="message-label">Type your new message here!</label>
           <textarea id="message" name="message" rows="4" cols="25">{% if message %}{{ message|escape }}{% else %}{% if not request.mobile %}Type your new message here{% endif %}{% endif %}</textarea>
         </p>
+        <p>Attach:</p>
+        <div id="usual1" class="usual">
+          <ul class="tabs">
+             <li><a id="oembedvideo" href="#" class="embed">Link</a></li>
+          </ul>
+        </div>
+        <div id="oembedvideo_form" class="formoembed" style="display: block; ">
+             <div id="oembedcont">
+               <input type="text" id="link" name="link"/>
+             </div>
+             <div id="oembed"></div>
+        </div>
+        
+        {% comment %}
+        <div id="usual1" class="usual">
+          <ul class="tabs">
+             <li><a id="oembedvideo" href="#" class="embed">Video</a></li>
+             <li><a id="oembedphoto" href="#" class="embed">Photo</a></li>
+             <li><a id="oembedlink" href="#" class="embed">Link</a></li>
+          </ul>
+          <div id="oembedvideo_form" class="formoembed" style="display: block; ">
+             <div id="oembedcont">
+               Post a link to your favorite Video<br />
+               <input type="text" id="video" name="video"/>
+             </div>
+             <div id="oembed"></div>
+          </div>
+          <div id="oembedphoto_form" class="formoembed" style="display: none; ">
+             <div id="oembedcont">
+               Post a link to your favorite Photo<br />
+               <input type="text" id="potho" name="potho"/>
+             </div>
+             <div id="oembed"></div>
+          </div>
+          <div id="oembedlink_form" class="formoembed" style="display: none; ">
+             <div id="oembedcont">
+               Post a link to your favorite Page<br />
+               <input type="text" id="page" name="page" />
+             </div>
+             <div id="oembed"></div>
+          </div>
+        </div>
+        {% endcomment %}
         <p id="latest">
           {% if latest %}
             <strong>Latest:</strong>

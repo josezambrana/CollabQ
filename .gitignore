@@ -5,4 +5,5 @@
 *.bak
 *.orig
 *.swp
+*.git
 nbproject/

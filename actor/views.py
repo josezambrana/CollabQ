@@ -15,6 +15,7 @@
 
 import logging
 import time
+import urllib2
 
 from common import api
 from common import clean
@@ -441,7 +442,32 @@ def actor_overview(request, nick, format='html'):
     t = loader.get_template('actor/templates/overview.rss')
     r = util.HttpRssResponse(t.render(c), request)
   return r
-    
+
+
+"""
+def esUrl(cad):
+  list =[]
+  if(cad.startswith("http://")|cad.startswith("www."),str(y).split()):
+      list.apend(cad)
+  return list
+
+map(lambda y:(y,filter(lambda x:x.startswith("http://")|x.startswith("www."),str(y).split())),entries)
+
+
+servicio, lin parser(entry.title)
+probedor = FactoryProvider('servicio')
+data = provedor.fetch(link)
+obj = simplejson.dump(data)
+object.type = probedor.type
+
+{% ifequal onb.type 'potho' %}
+   <img url="{{obj.url}}">
+
+{% ifequal onb.type 'video' %}
+  video
+{% endif%}
+data = url.f
+"""
 # This is for mentions and is dirty! needs refactor.
 # Refactor!
 # begin @zero code

@@ -1,0 +1,45 @@
+{% if url %}
+{% for linc in url%}
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+
+{%comment %}
+<script type="text/javascript" src="/js/jquery.oembed.min.js"></script>
+{%endcomment%}
+<script type="text/javascript" src= "/js/jquery.oembed.js"></script>
+<script type="text/javascript">
+        $(document).ready(function() {
+                $(".oembed").oembed(null,
+                        {
+                        embedMethod: "append",
+                        maxWidth: 1024,
+                        maxHeight: 768,
+                        vimeo:{ autoplay: false, maxWidth: 320, maxHeight: 240},
+                        youtube:{ autoplay: false, maxWidth: 320, maxHeight: 240},
+                        metacafe:{ autoplay: false, maxWidth: 320, maxHeight: 240},
+                        qik:{ autoplay: false, maxWidth: 320, maxHeight: 240},
+                        flickr:{ maxWidth: 320, maxHeight: 240},
+                        amazon:{ maxWidth: 320, maxHeight: 240},
+                        twitpic:{ maxWidth: 320, maxHeight: 240},
+                        viddler:{ autoplay: false, maxWidth: 320, maxHeight: 240},
+//                        myspace:{ autoplay: false, maxWidth: 320, maxHeight: 240},
+                        screenr:{ autoplay: false, maxWidth: 320, maxHeight: 240},
+
+                        slideshare:{ maxWidth: 320, maxHeight: 240},
+                        imdb:{ maxWidth: 320, maxHeight: 240},                        
+                        hulu:{ autoplay: false, maxWidth: 320, maxHeight: 240},
+                        googlevideo: { autoplay: false, maxWidth: 320, maxHeight: 240},
+                        revision3:{ autoplay: false, maxWidth: 320, maxHeight: 240},
+                        fivemin: { autoplay: false, maxWidth: 320, maxHeight: 240}
+                      
+        //new OEmbedProvider("wikipedia", "wikipedia.org"),
+        //new OEmbedProvider("wordpress", "wordpress.com"),
+        //new OEmbedProvider("vids.myspace.com", "vids.myspace.com", "http://vids.myspace.com/index.cfm?fuseaction=oembed"),
+	//new OEmbedProvider("screenr", "screenr.com", "http://screenr.com/api/oembed.json")
+
+                        });
+        });
+</script>
+<div><a href= "{{linc}}" class="oembed"></a></div></body>
+{% endfor %}
+{% endif %}

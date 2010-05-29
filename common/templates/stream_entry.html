@@ -8,8 +8,15 @@
       {% actor_link entry.actor_ref request %}
     </span>
   {% endif %}
-   <span>{{entry.extra.title|pobox_escape|format_fancy|format_links|format_actor_links|urlize}}</span>
+   <span>   
+   {{entry.extra.title|pobox_escape|format_fancy|format_links|format_actor_links|urlize}}
+   {% autoescape off %}
+       {{entry.extra.link}}
+   {% endautoescape %}
+    </span>
 </h3>
+
+
 <p class="meta">
   {% ifnotequal entry.actor entry.owner %}
     to {% actor_link entry.owner_ref request %}
@@ -23,6 +30,7 @@
     {% entry_remove request.user entry user_is_admin %}
     <a href="{% url_for entry request %}#comments" class="add-comment">
       Comment{% if entry.extra.comment_count %}{{entry.extra.comment_count|pluralize}}({{entry.extra.comment_count}}){% endif %}
+      
     </a>
   </span>
   {% endif %}
